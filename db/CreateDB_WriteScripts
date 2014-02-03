@@ -4,8 +4,6 @@ File.delete("eim_dump.db") if File::exists?( "eim_dump.db" )
 
 # Open a SQLite 3 database file
 db = SQLite3::Database.new "eim_dump.db"
-#SQLite3::Database.new 'entitlements.db'
-#db = SQLite3::Database.open 'entitlements.db'
 
 puts "SELECT SQLITE_VERSION <#{db.get_first_value 'SELECT SQLITE_VERSION()'}>"
 
@@ -140,7 +138,8 @@ if [ -z "$ORACLE_HOME" ]; then
 export ORACLE_HOME=/opt/payables/app/srvpaydv/product/11.2.0/client_1
 export PATH=$PATH:$ORACLE_HOME/bin
 fi
-sqlplus user_id/password@database @/opt/payablesint/queries/userlog.sql
+sqlplus ${user_id}/${password}@${database} @${path}/queries/userlog.sql
+#sqlplus ${user_id}/${password}@${database} @/opt/payablesint/queries/userlog.sql
 
 =end
 
@@ -166,7 +165,8 @@ SELECT '"' ||
            TRANSLATE (LTRIM(RTRIM(USERACTION)), ','||CHR(10)||CHR(13), ' ') || '","' ||
            TO_CHAR(LOGTIME, 'mm/dd/yyyy HH24:MI:SS') || '","' ||
            TRANSLATE (LTRIM(RTRIM(ACTIONMESSAGE)), ','||CHR(10)||CHR(13), ' ') || '"'
-FROM WEBSYSTEM.USERLOG
+FROM WEBSYSTEM.${table_name}
+--FROM WEBSYSTEM.USERLOG
 --Used for testing
          --where rownum < 12
          ;
